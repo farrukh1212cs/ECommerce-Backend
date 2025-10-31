@@ -1,7 +1,10 @@
-﻿using ECommerce.Infrastructure.Data;
+﻿using ECommerce.Application.Services.Interfaces;
+using ECommerce.Infrastructure.Caching;
+using ECommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace ECommerce.Infrastructure;
 
@@ -35,6 +38,16 @@ public static class DependencyInjection
         else
         {
             throw new InvalidOperationException($"Unsupported provider: {provider}");
+        }
+
+        // ✅ Redis cache setup
+        var redisConnection = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrEmpty(redisConnection))
+        {
+            services.AddSingleton<IConnectionMultiplexer>(sp =>
+                ConnectionMultiplexer.Connect(redisConnection));
+
+            services.AddSingleton<ICacheService, RedisCacheService>();
         }
 
         return services;
