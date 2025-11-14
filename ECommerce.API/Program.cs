@@ -4,6 +4,7 @@ using ECommerce.Application.Services.Interfaces;
 using ECommerce.Domain.Repositories;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Data;
+using ECommerce.Infrastructure.Identity;
 using ECommerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,8 +58,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Add this before mapping controllers
+app.UseAuthentication();   // must come first
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await IdentitySeeder.SeedRolesAndAdminAsync(services);
+}
+
 
 app.Run();

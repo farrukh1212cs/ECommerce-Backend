@@ -1,15 +1,20 @@
 using ECommerce.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.Data;
 
-public abstract class AppDbContext : DbContext
+// Generic base class for all provider-specific contexts
+public abstract class AppDbContext
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
-    protected AppDbContext(DbContextOptions options) : base(options)
+    protected AppDbContext(DbContextOptions options)
+        : base(options)
     {
     }
 
-    // DbSets
+    // Domain DbSets
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<Customer> Customers { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
@@ -63,8 +68,5 @@ public abstract class AppDbContext : DbContext
             b.Property(oi => oi.UnitPrice).HasColumnType("decimal(18,2)");
             b.Property(oi => oi.Quantity).IsRequired();
         });
-
-        // If you want to seed or add indexes later, do it here.
     }
 }
-
