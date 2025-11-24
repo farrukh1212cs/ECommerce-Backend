@@ -1,4 +1,5 @@
 ﻿using ECommerce.API.BackgroundServices;
+using ECommerce.Application.Services.Implementations;
 using ECommerce.Application.Services.Interfaces;
 using ECommerce.Domain.Entities;
 using ECommerce.Infrastructure.Caching;
@@ -102,6 +103,7 @@ public static class DependencyInjection
         // RabbitMQ setup
         services.AddSingleton<IMessageQueueService, RabbitMQService>();
         services.AddScoped<IEmailSenderService, EmailSenderService>();
+        services.AddScoped<IAuthService, AuthService>();
       
 
         return services;

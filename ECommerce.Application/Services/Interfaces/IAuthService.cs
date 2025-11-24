@@ -10,3 +10,4 @@ public interface IAuthService
 public record RegisterRequest(string Email, string Password, string? FirstName = null, string? LastName = null);
 public record LoginRequest(string Email, string Password);
 public record AuthenticationResult(bool Success, string? Token, string? RefreshToken, IEnumerable<string>? Errors);
+public record RefreshRequest(string Token, string RefreshToken);
