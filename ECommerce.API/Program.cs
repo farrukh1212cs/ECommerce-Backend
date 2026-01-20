@@ -1,7 +1,9 @@
 using ECommerce.Application.Services.Implementations;
 using ECommerce.Application.Services.Interfaces;
 using ECommerce.Domain.Repositories;
+using ECommerce.Infrastructure.Data;
 using ECommerce.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add Controllers
 // ------------------------------------------------------
 builder.Services.AddControllers();
+
+// ------------------------------------------------------
+// Database Configuration (MySQL)
+// ------------------------------------------------------
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
 
 
 // ------------------------------------------------------
