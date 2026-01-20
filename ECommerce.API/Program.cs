@@ -1,10 +1,11 @@
+using ECommerce.API.BackgroundServices;
 using ECommerce.Application.Services.Implementations;
 using ECommerce.Application.Services.Interfaces;
 using ECommerce.Domain.Repositories;
+using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Data;
 using ECommerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using ECommerce.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddControllers();
 
 // add infrastructure (DbContext + provider selection)
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddHostedService<EmailNotificationConsumer>();
 
 // ------------------------------------------------------
 //  Repository Registrations
