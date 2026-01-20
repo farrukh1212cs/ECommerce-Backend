@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace ECommerce.Infrastructure.Data;
 
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+public class MySqlDbContextFactory : IDesignTimeDbContextFactory<MySqlDbContext>
 {
-    public AppDbContext CreateDbContext(string[] args)
+    public MySqlDbContext CreateDbContext(string[] args)
     {
         // Locate the API project's appsettings.json
         var basePath = Path.Combine(Directory.GetCurrentDirectory(), "../ECommerce.API");
@@ -16,14 +16,16 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
             .AddJsonFile("appsettings.Development.json", optional: true)
             .Build();
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString("MySQL")
+            ?? throw new InvalidOperationException("MySQL connection string not found in appsettings.json");
 
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<MySqlDbContext>();
+        // Use a fixed version instead of ServerVersion.AutoDetect to avoid connection attempts during design-time
         optionsBuilder.UseMySql(
             connectionString,
             new MySqlServerVersion(new Version(8, 0, 36))
         );
 
-        return new AppDbContext(optionsBuilder.Options);
+        return new MySqlDbContext(optionsBuilder.Options);
     }
 }

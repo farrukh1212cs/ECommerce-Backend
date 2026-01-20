@@ -4,6 +4,7 @@ using ECommerce.Domain.Repositories;
 using ECommerce.Infrastructure.Data;
 using ECommerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,15 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 // ------------------------------------------------------
 builder.Services.AddControllers();
 
-// ------------------------------------------------------
-// Database Configuration (MySQL)
-// ------------------------------------------------------
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-);
-
+// add infrastructure (DbContext + provider selection)
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // ------------------------------------------------------
 //  Repository Registrations
@@ -62,9 +56,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
-app.Run();
 app.MapControllers();
 
 app.Run();

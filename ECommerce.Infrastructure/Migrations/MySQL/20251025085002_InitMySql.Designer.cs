@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ECommerce.Infrastructure.Migrations
+namespace ECommerce.Infrastructure.Migrations.MySQL
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20251025064917_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(MySqlDbContext))]
+    [Migration("20251025085002_InitMySql")]
+    partial class InitMySql
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
