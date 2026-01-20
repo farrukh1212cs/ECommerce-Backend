@@ -25,6 +25,13 @@ public static class DependencyInjection
             services.AddDbContext<AppDbContext, MySqlDbContext>(options =>
                 options.UseMySql(conn, ServerVersion.AutoDetect(conn)));
         }
+        else if (string.Equals(provider, "PostgreSQL", StringComparison.OrdinalIgnoreCase))
+        {
+
+            var conn = configuration.GetConnectionString("PostgreSQL");
+            services.AddDbContext<AppDbContext, PostgresDbContext>(options =>
+                options.UseNpgsql(conn));
+        }
         else
         {
             throw new InvalidOperationException($"Unsupported provider: {provider}");
