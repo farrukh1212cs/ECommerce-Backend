@@ -115,6 +115,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ECommerce.API.Middleware.ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
